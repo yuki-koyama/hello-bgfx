@@ -1,3 +1,6 @@
 [submodule "external/bgfx.cmake"]
 	path = external/bgfx.cmake
 	url = https://github.com/JoshuaBrookover/bgfx.cmake.git
+[submodule "external/glfw"]
+	path = external/glfw
+	url = https://github.com/glfw/glfw.git

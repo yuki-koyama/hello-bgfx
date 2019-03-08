@@ -4,6 +4,27 @@
 #include <bx/math.h>
 #include "templatewindow.hpp"
 
+namespace bgfxutil
+{
+    bgfx::ShaderHandle loadShader(const std::string& shader_path)
+    {
+        std::ifstream input_stream(shader_path, std::ios::binary);
+        if (!input_stream.is_open())
+        {
+            throw std::runtime_error("Failed to open a shader file.");
+        }
+
+        input_stream.seekg(0, std::ios::end);
+        const long file_size = input_stream.tellg();
+        input_stream.seekg(0);
+        const bgfx::Memory* mem = bgfx::alloc(file_size + 1);
+        input_stream.read(reinterpret_cast<char*>(mem->data), file_size);
+        mem->data[mem->size - 1] = '\0';
+
+        return bgfx::createShader(mem);
+    }
+}
+
 std::string getShaderDirectoryPath(const bgfx::RendererType::Enum renderer_type)
 {
     const std::string base_path = BGFX_EXAMPLE_SHADERS_DIR;
@@ -17,24 +38,6 @@ std::string getShaderDirectoryPath(const bgfx::RendererType::Enum renderer_type)
         }
     }();
     return base_path + "/" + render_type_directory_name;
-}
-
-bgfx::ShaderHandle loadShader(const std::string& shader_path)
-{
-    std::ifstream input_stream(shader_path, std::ios::binary);
-    if (!input_stream.is_open())
-    {
-        throw std::runtime_error("Failed to open a shader file.");
-    }
-
-    input_stream.seekg(0, std::ios::end);
-    const long file_size = input_stream.tellg();
-    input_stream.seekg(0);
-    const bgfx::Memory* mem = bgfx::alloc(file_size + 1);
-    input_stream.read(reinterpret_cast<char*>(mem->data), file_size);
-    mem->data[mem->size - 1] = '\0';
-
-    return bgfx::createShader(mem);
 }
 
 struct Camera
@@ -115,8 +118,8 @@ protected:
         m_index_buffer_handle = bgfx::createIndexBuffer(bgfx::makeRef(cube_triangle_list, sizeof(cube_triangle_list)));
 
         const std::string shader_directory_path = getShaderDirectoryPath(bgfx::getRendererType());
-        m_vertex_shader = loadShader(shader_directory_path + "/vs_cubes.bin");
-        m_fragment_shader = loadShader(shader_directory_path + "/fs_cubes.bin");
+        m_vertex_shader = bgfxutil::loadShader(shader_directory_path + "/vs_cubes.bin");
+        m_fragment_shader = bgfxutil::loadShader(shader_directory_path + "/fs_cubes.bin");
         m_program = bgfx::createProgram(m_vertex_shader, m_fragment_shader, true);
     }
 

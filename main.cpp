@@ -52,6 +52,7 @@ struct Vertex
 class Window : public TemplateWindow
 {
 public:
+
     Window(const std::string& title)
     : TemplateWindow(title)
     {
@@ -117,6 +118,8 @@ protected:
 
     void updateGraphics() override
     {
+        const float t = static_cast<float>(getElapsedTimeInMilliseconds()) / 1000.0;
+
         float view_matrix[16];
         bx::mtxLookAt(view_matrix, m_camera.position, m_camera.target, m_camera.up);
         float proj_matrix[16];
@@ -124,7 +127,7 @@ protected:
         bgfx::setViewTransform(0, view_matrix, proj_matrix);
 
         float model_matrix[16];
-        bx::mtxRotateXY(model_matrix, m_counter * 0.011f, m_counter * 0.017f);
+        bx::mtxRotateXY(model_matrix, 1.1f * t, 1.7f * t);
         bgfx::setTransform(model_matrix);
 
         bgfx::setVertexBuffer(0, m_vertex_buffer_handle);

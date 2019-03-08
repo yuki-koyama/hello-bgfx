@@ -1,6 +1,7 @@
 #ifndef templatewindow_hpp
 #define templatewindow_hpp
 
+#include <chrono>
 #include <bgfx/bgfx.h>
 #include <GLFW/glfw3.h>
 #define GLFW_EXPOSE_NATIVE_COCOA
@@ -21,6 +22,8 @@ public:
         m_window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
 
         if (!m_window) { throw std::runtime_error("Cannot create a window."); }
+
+        m_time_point = std::chrono::steady_clock::now();
     }
 
     ~TemplateWindow()
@@ -98,16 +101,29 @@ public:
         return static_cast<float>(width) / static_cast<float>(height);
     }
 
+    uint32_t getCounter() const { return m_counter; }
+
 protected:
 
     virtual void initializeGraphics() = 0;
     virtual void updateGraphics() = 0;
 
-    uint32_t m_counter;
-
     GLFWwindow* m_window;
 
     bool m_is_initialized = false;
+
+    uint64_t getElapsedTimeInMilliseconds() const
+    {
+        const auto current_time_point = std::chrono::steady_clock::now();
+        const auto elapsed_duration   = std::chrono::duration_cast<std::chrono::milliseconds>(current_time_point - m_time_point);
+
+        return elapsed_duration.count();
+    }
+
+private:
+
+    uint32_t m_counter;
+    std::chrono::steady_clock::time_point m_time_point;
 };
 
 #endif /* templatewindow_hpp */

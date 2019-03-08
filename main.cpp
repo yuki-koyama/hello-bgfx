@@ -7,8 +7,12 @@
 
 namespace
 {
-    constexpr int window_width = 1280;
-    constexpr int window_height = 720;
+    constexpr int window_width = 600;
+    constexpr int window_height = 400;
+}
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
 }
 
 int main(int argc, char** argv)
@@ -26,7 +30,7 @@ int main(int argc, char** argv)
     }
 
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1);
+    glfwSetKeyCallback(window, key_callback);
 
     bgfx::Init bgfx_init_settings;
     bgfx_init_settings.type = bgfx::RendererType::Count;
@@ -36,16 +40,15 @@ int main(int argc, char** argv)
     bgfx_init_settings.platformData.nwh = glfwGetCocoaWindow(window);
     bgfx::init(bgfx_init_settings);
 
-    bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x443355FF, 1.0f, 0);
+    constexpr uint64 bg_color = 0x443355FF;
+    bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, bg_color, 1.0f, 0);
     bgfx::setViewRect(0, 0, 0, window_width, window_height);
-
-    glfwHideWindow(window);
-    glfwShowWindow(window);
 
 #ifdef FIX_MACOS_MOJAVE_ISSUE
     bool is_initialized_for_mojave = false;
 #endif
 
+    int counter = 0;
     while (!glfwWindowShouldClose(window))
     {
 #ifdef FIX_MACOS_MOJAVE_ISSUE
@@ -59,9 +62,16 @@ int main(int argc, char** argv)
         }
 #endif
 
+        const uint64 color = (counter % 60 < 5) ? 0xAA3355FF : 0x443355FF;
+        bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, color, 1.0f, 0);
+
+        bgfx::submit(0, bgfx::ProgramHandle());
         bgfx::frame();
-        glfwSwapBuffers(window);
+
         glfwPollEvents();
+
+        ++ counter;
+        counter %= 60;
     }
 
     bgfx::shutdown();

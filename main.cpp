@@ -2,6 +2,8 @@
 #include <iostream>
 #include <string>
 #include <bx/math.h>
+#include <glm/ext.hpp>
+#include <glm/gtx/string_cast.hpp>
 #include "templatewindow.hpp"
 
 namespace bgfxutil
@@ -42,9 +44,9 @@ std::string getShaderDirectoryPath(const bgfx::RendererType::Enum renderer_type)
 
 struct Camera
 {
-    bx::Vec3 target;
-    bx::Vec3 position;
-    bx::Vec3 up;
+    glm::vec3 position;
+    glm::vec3 target;
+    glm::vec3 up;
 };
 
 struct Vertex
@@ -107,6 +109,8 @@ protected:
             4, 5, 1,
             2, 3, 6,
             6, 3, 7,
+            1, 0, 2,
+            3, 1, 2,
         };
 
         bgfx::VertexDecl vertex_decl;
@@ -125,17 +129,13 @@ protected:
 
     void updateGraphics() override
     {
+        const glm::mat4 view_matrix = glm::lookAtLH(m_camera.position, m_camera.target, m_camera.up);
+        const glm::mat4 proj_matrix = glm::perspectiveLH(glm::radians(60.0f), getAspect(), 0.1f, 100.0f);
+        bgfx::setViewTransform(0, glm::value_ptr(view_matrix), glm::value_ptr(proj_matrix));
+
         const float t = static_cast<float>(getElapsedTimeInMilliseconds()) / 1000.0;
-
-        float view_matrix[16];
-        bx::mtxLookAt(view_matrix, m_camera.position, m_camera.target, m_camera.up);
-        float proj_matrix[16];
-        bx::mtxProj(proj_matrix, 60.0f, getAspect(), 0.1f, 100.0f, bgfx::getCaps()->homogeneousDepth);
-        bgfx::setViewTransform(0, view_matrix, proj_matrix);
-
-        float model_matrix[16];
-        bx::mtxRotateXY(model_matrix, 1.1f * t, 1.7f * t);
-        bgfx::setTransform(model_matrix);
+        const glm::mat4 model_matrix = glm::rotate(glm::mat4(1.0f), 1.0f * t, glm::vec3(3.0f, 4.0f, 5.0f));
+        bgfx::setTransform(glm::value_ptr(model_matrix));
 
         bgfx::setVertexBuffer(0, m_vertex_buffer_handle);
         bgfx::setIndexBuffer(m_index_buffer_handle);
@@ -147,8 +147,8 @@ private:
 
     Camera m_camera =
     {
-        { 0.0, 0.0, 0.0 },
         { 0.0, 0.0, - 5.0 },
+        { 0.0, 0.0, 0.0 },
         { 0.0, 1.0, 0.0 },
     };
 

@@ -85,14 +85,14 @@ protected:
 
         static const Vertex cube_vertices[] =
         {
-            { -1.0f,  1.0f,  1.0f, 0xff000000 },
-            {  1.0f,  1.0f,  1.0f, 0xff0000ff },
-            { -1.0f, -1.0f,  1.0f, 0xff00ff00 },
-            {  1.0f, -1.0f,  1.0f, 0xff00ffff },
-            { -1.0f,  1.0f, -1.0f, 0xffff0000 },
-            {  1.0f,  1.0f, -1.0f, 0xffff00ff },
-            { -1.0f, -1.0f, -1.0f, 0xffffff00 },
-            {  1.0f, -1.0f, -1.0f, 0xffffffff },
+            {  1.0f,  1.0f,  1.0f, 0xff000000 },
+            { -1.0f,  1.0f,  1.0f, 0xff0000ff },
+            {  1.0f, -1.0f,  1.0f, 0xff00ff00 },
+            { -1.0f, -1.0f,  1.0f, 0xff00ffff },
+            {  1.0f,  1.0f, -1.0f, 0xffff0000 },
+            { -1.0f,  1.0f, -1.0f, 0xffff00ff },
+            {  1.0f, -1.0f, -1.0f, 0xffffff00 },
+            { -1.0f, -1.0f, -1.0f, 0xffffffff },
         };
 
         static const uint16_t cube_triangle_list[] =
@@ -129,12 +129,12 @@ protected:
 
     void updateGraphics() override
     {
-        const glm::mat4 view_matrix = glm::lookAtLH(m_camera.position, m_camera.target, m_camera.up);
-        const glm::mat4 proj_matrix = glm::perspectiveLH(glm::radians(60.0f), getAspect(), 0.1f, 100.0f);
+        const glm::mat4 view_matrix = glm::lookAt(m_camera.position, m_camera.target, m_camera.up);
+        const glm::mat4 proj_matrix = glm::perspective(glm::radians(60.0f), getAspect(), 0.1f, 100.0f);
         bgfx::setViewTransform(0, glm::value_ptr(view_matrix), glm::value_ptr(proj_matrix));
 
         const float t = static_cast<float>(getElapsedTimeInMilliseconds()) / 1000.0;
-        const glm::mat4 model_matrix = glm::rotate(glm::mat4(1.0f), 1.0f * t, glm::vec3(3.0f, 4.0f, 5.0f));
+        const glm::mat4 model_matrix = glm::rotate(glm::mat4(1.0f), 1.0f * t, glm::vec3(2.0f, 1.0f, 1.0f));
         bgfx::setTransform(glm::value_ptr(model_matrix));
 
         bgfx::setVertexBuffer(0, m_vertex_buffer_handle);

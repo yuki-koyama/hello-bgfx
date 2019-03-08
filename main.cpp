@@ -4,20 +4,23 @@
 #include <bx/math.h>
 #include "templatewindow.hpp"
 
-bgfx::ShaderHandle loadShader(const std::string& shader_name)
+std::string getShaderDirectoryPath(const bgfx::RendererType::Enum renderer_type)
 {
     const std::string base_path = BGFX_EXAMPLE_SHADERS_DIR;
-    const std::string render_type_directory_name = []()
+    const std::string render_type_directory_name = [&]()
     {
-        switch (bgfx::getRendererType())
+        switch (renderer_type)
         {
             case bgfx::RendererType::Metal: return "metal";
             case bgfx::RendererType::OpenGL: return "glsl";
             default: throw std::runtime_error("Renderer type not supported.");
         }
     }();
-    const std::string shader_path = base_path + "/" + render_type_directory_name + "/" + shader_name;
+    return base_path + "/" + render_type_directory_name;
+}
 
+bgfx::ShaderHandle loadShader(const std::string& shader_path)
+{
     std::ifstream input_stream(shader_path, std::ios::binary);
     if (!input_stream.is_open())
     {
@@ -111,8 +114,9 @@ protected:
         m_vertex_buffer_handle = bgfx::createVertexBuffer(bgfx::makeRef(cube_vertices, sizeof(cube_vertices)), vertex_decl);
         m_index_buffer_handle = bgfx::createIndexBuffer(bgfx::makeRef(cube_triangle_list, sizeof(cube_triangle_list)));
 
-        m_vertex_shader = loadShader("vs_cubes.bin");
-        m_fragment_shader = loadShader("fs_cubes.bin");
+        const std::string shader_directory_path = getShaderDirectoryPath(bgfx::getRendererType());
+        m_vertex_shader = loadShader(shader_directory_path + "/vs_cubes.bin");
+        m_fragment_shader = loadShader(shader_directory_path + "/fs_cubes.bin");
         m_program = bgfx::createProgram(m_vertex_shader, m_fragment_shader, true);
     }
 

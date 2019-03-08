@@ -51,8 +51,9 @@ int main(int argc, char** argv)
 #ifdef FIX_MACOS_MOJAVE_ISSUE
         if (!is_initialized_for_mojave)
         {
+            constexpr int non_zero = 1;
             glfwPollEvents();
-            glfwSetWindowSize(window, window_width + 1, window_height);
+            glfwSetWindowSize(window, window_width + non_zero, window_height);
             glfwSetWindowSize(window, window_width, window_height);
             is_initialized_for_mojave = true;
         }

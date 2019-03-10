@@ -48,6 +48,6 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/external/glm)
 
 add_definitions(-DBGFX_EXAMPLE_SHADERS_DIR="${BGFX_DIR}/examples/runtime/shaders")
 
-file(GLOB files *.cpp *.hpp)
+file(GLOB files *.cpp *.hpp primitives/*.cpp primitives/*.hpp)
 add_executable(hello-bgfx ${files})
 target_link_libraries(hello-bgfx bgfx dear-imgui glfw glm)

@@ -61,96 +61,17 @@ class Window : public TemplateWindow
 {
 public:
 
-    Window(const std::string& title)
-    : TemplateWindow(title)
-    {
-    }
-
-    ~Window()
-    {
-        if (m_is_initialized)
-        {
-            bgfx::destroy(m_index_buffer_handle);
-            bgfx::destroy(m_vertex_buffer_handle);
-        }
-    }
+    Window(const std::string& title);
+    ~Window();
 
 protected:
 
-    void initializeGraphics() override
-    {
-        constexpr uint32_t bg_color = 0x333333ff;
-        bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, bg_color, 1.0f, 0);
-        bgfx::setViewRect(0, 0, 0, getWidth(), getHeight());
-
-        static const Vertex cube_vertices[] =
-        {
-            {  1.0f,  1.0f,  1.0f, 0xff000000 },
-            { -1.0f,  1.0f,  1.0f, 0xff0000ff },
-            {  1.0f, -1.0f,  1.0f, 0xff00ff00 },
-            { -1.0f, -1.0f,  1.0f, 0xff00ffff },
-            {  1.0f,  1.0f, -1.0f, 0xffff0000 },
-            { -1.0f,  1.0f, -1.0f, 0xffff00ff },
-            {  1.0f, -1.0f, -1.0f, 0xffffff00 },
-            { -1.0f, -1.0f, -1.0f, 0xffffffff },
-        };
-
-        static const uint16_t cube_triangle_list[] =
-        {
-            0, 1, 2,
-            1, 3, 2,
-            4, 6, 5,
-            5, 6, 7,
-            0, 2, 4,
-            4, 2, 6,
-            1, 5, 3,
-            5, 7, 3,
-            0, 4, 1,
-            4, 5, 1,
-            2, 3, 6,
-            6, 3, 7,
-            1, 0, 2,
-            3, 1, 2,
-        };
-
-        bgfx::VertexDecl vertex_decl;
-        vertex_decl.begin()
-        .add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float)
-        .add(bgfx::Attrib::Color0, 4, bgfx::AttribType::Uint8, true)
-        .end();
-        m_vertex_buffer_handle = bgfx::createVertexBuffer(bgfx::makeRef(cube_vertices, sizeof(cube_vertices)), vertex_decl);
-        m_index_buffer_handle = bgfx::createIndexBuffer(bgfx::makeRef(cube_triangle_list, sizeof(cube_triangle_list)));
-
-        const std::string shader_directory_path = getShaderDirectoryPath(bgfx::getRendererType());
-        m_vertex_shader = bgfxutil::loadShader(shader_directory_path + "/vs_cubes.bin");
-        m_fragment_shader = bgfxutil::loadShader(shader_directory_path + "/fs_cubes.bin");
-        m_program = bgfx::createProgram(m_vertex_shader, m_fragment_shader, true);
-    }
-
-    void updateGraphics() override
-    {
-        const glm::mat4 view_matrix = glm::lookAt(m_camera.position, m_camera.target, m_camera.up);
-        const glm::mat4 proj_matrix = glm::perspective(glm::radians(60.0f), getAspect(), 0.1f, 100.0f);
-        bgfx::setViewTransform(0, glm::value_ptr(view_matrix), glm::value_ptr(proj_matrix));
-
-        const float t = static_cast<float>(getElapsedTimeInMilliseconds()) / 1000.0;
-        const glm::mat4 model_matrix = glm::rotate(glm::mat4(1.0f), 1.0f * t, glm::vec3(2.0f, 1.0f, 1.0f));
-        bgfx::setTransform(glm::value_ptr(model_matrix));
-
-        bgfx::setVertexBuffer(0, m_vertex_buffer_handle);
-        bgfx::setIndexBuffer(m_index_buffer_handle);
-
-        bgfx::submit(0, m_program);
-    }
+    void initializeGraphics() override;
+    void updateGraphics() override;
 
 private:
 
-    Camera m_camera =
-    {
-        { 0.0, 0.0, - 5.0 },
-        { 0.0, 0.0, 0.0 },
-        { 0.0, 1.0, 0.0 },
-    };
+    Camera m_camera;
 
     bgfx::VertexBufferHandle m_vertex_buffer_handle;
     bgfx::IndexBufferHandle m_index_buffer_handle;
@@ -159,6 +80,92 @@ private:
     bgfx::ShaderHandle m_fragment_shader;
     bgfx::ProgramHandle m_program;
 };
+
+Window::Window(const std::string& title) :
+TemplateWindow(title),
+m_camera(
+{
+    { 0.0, 0.0, - 5.0 },
+    { 0.0, 0.0, 0.0 },
+    { 0.0, 1.0, 0.0 },
+})
+{
+}
+
+Window::~Window()
+{
+    if (m_is_initialized)
+    {
+        bgfx::destroy(m_index_buffer_handle);
+        bgfx::destroy(m_vertex_buffer_handle);
+    }
+}
+
+void Window::initializeGraphics()
+{
+    constexpr uint32_t bg_color = 0x333333ff;
+    bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, bg_color, 1.0f, 0);
+    bgfx::setViewRect(0, 0, 0, getWidth(), getHeight());
+
+    static const Vertex cube_vertices[] =
+    {
+        {  1.0f,  1.0f,  1.0f, 0xff000000 },
+        { -1.0f,  1.0f,  1.0f, 0xff0000ff },
+        {  1.0f, -1.0f,  1.0f, 0xff00ff00 },
+        { -1.0f, -1.0f,  1.0f, 0xff00ffff },
+        {  1.0f,  1.0f, -1.0f, 0xffff0000 },
+        { -1.0f,  1.0f, -1.0f, 0xffff00ff },
+        {  1.0f, -1.0f, -1.0f, 0xffffff00 },
+        { -1.0f, -1.0f, -1.0f, 0xffffffff },
+    };
+
+    static const uint16_t cube_triangle_list[] =
+    {
+        0, 1, 2,
+        1, 3, 2,
+        4, 6, 5,
+        5, 6, 7,
+        0, 2, 4,
+        4, 2, 6,
+        1, 5, 3,
+        5, 7, 3,
+        0, 4, 1,
+        4, 5, 1,
+        2, 3, 6,
+        6, 3, 7,
+        1, 0, 2,
+        3, 1, 2,
+    };
+
+    bgfx::VertexDecl vertex_decl;
+    vertex_decl.begin()
+    .add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float)
+    .add(bgfx::Attrib::Color0, 4, bgfx::AttribType::Uint8, true)
+    .end();
+    m_vertex_buffer_handle = bgfx::createVertexBuffer(bgfx::makeRef(cube_vertices, sizeof(cube_vertices)), vertex_decl);
+    m_index_buffer_handle = bgfx::createIndexBuffer(bgfx::makeRef(cube_triangle_list, sizeof(cube_triangle_list)));
+
+    const std::string shader_directory_path = getShaderDirectoryPath(bgfx::getRendererType());
+    m_vertex_shader = bgfxutil::loadShader(shader_directory_path + "/vs_cubes.bin");
+    m_fragment_shader = bgfxutil::loadShader(shader_directory_path + "/fs_cubes.bin");
+    m_program = bgfx::createProgram(m_vertex_shader, m_fragment_shader, true);
+}
+
+void Window::updateGraphics()
+{
+    const glm::mat4 view_matrix = glm::lookAt(m_camera.position, m_camera.target, m_camera.up);
+    const glm::mat4 proj_matrix = glm::perspective(glm::radians(60.0f), getAspect(), 0.1f, 100.0f);
+    bgfx::setViewTransform(0, glm::value_ptr(view_matrix), glm::value_ptr(proj_matrix));
+
+    const float t = static_cast<float>(getElapsedTimeInMilliseconds()) / 1000.0;
+    const glm::mat4 model_matrix = glm::rotate(glm::mat4(1.0f), 1.0f * t, glm::vec3(2.0f, 1.0f, 1.0f));
+    bgfx::setTransform(glm::value_ptr(model_matrix));
+
+    bgfx::setVertexBuffer(0, m_vertex_buffer_handle);
+    bgfx::setIndexBuffer(m_index_buffer_handle);
+
+    bgfx::submit(0, m_program);
+}
 
 int main(int argc, char** argv)
 {

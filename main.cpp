@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 #include "templatewindow.hpp"
+#include "camera.hpp"
 #include "primitives/cube.hpp"
 
 namespace bgfxutil
@@ -41,13 +42,6 @@ std::string getShaderDirectoryPath(const bgfx::RendererType::Enum renderer_type)
     }();
     return base_path + "/" + render_type_directory_name;
 }
-
-struct Camera
-{
-    glm::vec3 position;
-    glm::vec3 target;
-    glm::vec3 up;
-};
 
 class Window : public TemplateWindow
 {
@@ -110,12 +104,12 @@ void Window::initializeGraphics()
 
 void Window::updateGraphics()
 {
-    const glm::mat4 view_matrix = glm::lookAt(m_camera.position, m_camera.target, m_camera.up);
+    const glm::mat4 view_matrix = m_camera.getViewMatrix();
     const glm::mat4 proj_matrix = glm::perspective(glm::radians(60.0f), getAspect(), 0.1f, 100.0f);
     bgfx::setViewTransform(0, glm::value_ptr(view_matrix), glm::value_ptr(proj_matrix));
 
     const float t = static_cast<float>(getElapsedTimeInMilliseconds()) / 1000.0;
-    constexpr int n = 5;
+    constexpr int n = 4;
     for (int x = - n; x <= n; ++ x)
     {
         for (int y = - n; y <= n; ++ y)
@@ -123,7 +117,7 @@ void Window::updateGraphics()
             glm::mat4 model_matrix(1.0f);
             model_matrix = glm::translate(model_matrix, glm::vec3(x, y, 0.0f));
             model_matrix = glm::rotate(model_matrix, t, glm::vec3(x, y, 1.0f));
-            model_matrix = glm::scale(model_matrix, glm::vec3(0.25f, 0.25f, 0.25f));
+            model_matrix = glm::scale(model_matrix, glm::vec3(1.0f / n));
             bgfx::setTransform(glm::value_ptr(model_matrix));
 
             m_cube.submitPrimitive(m_program);

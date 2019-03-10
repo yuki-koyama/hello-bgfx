@@ -42,7 +42,7 @@ public:
         const int height = getHeight();
 
         bgfx::Init bgfx_init_settings;
-        bgfx_init_settings.type = bgfx::RendererType::Metal;
+        bgfx_init_settings.type = bgfx::RendererType::OpenGL;
         bgfx_init_settings.resolution.width = width;
         bgfx_init_settings.resolution.height = height;
         bgfx_init_settings.resolution.reset = BGFX_RESET_VSYNC;

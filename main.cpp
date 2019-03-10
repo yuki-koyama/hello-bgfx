@@ -30,6 +30,7 @@ namespace bgfxutil
 
 std::string getShaderDirectoryPath(const bgfx::RendererType::Enum renderer_type)
 {
+#if 0
     const std::string base_path = BGFX_EXAMPLE_SHADERS_DIR;
     const std::string render_type_directory_name = [&]()
     {
@@ -41,6 +42,9 @@ std::string getShaderDirectoryPath(const bgfx::RendererType::Enum renderer_type)
         }
     }();
     return base_path + "/" + render_type_directory_name;
+#else
+    return HELLO_BGFX_RUNTIME_RESOURCE_DIR;
+#endif
 }
 
 class Window : public TemplateWindow
@@ -95,8 +99,8 @@ void Window::initializeGraphics()
     bgfx::setViewRect(0, 0, 0, getWidth(), getHeight());
 
     const std::string shader_directory_path = getShaderDirectoryPath(bgfx::getRendererType());
-    m_vertex_shader = bgfxutil::loadShader(shader_directory_path + "/vs_cubes.bin");
-    m_fragment_shader = bgfxutil::loadShader(shader_directory_path + "/fs_cubes.bin");
+    m_vertex_shader = bgfxutil::loadShader(shader_directory_path + "/vs_simple.bin");
+    m_fragment_shader = bgfxutil::loadShader(shader_directory_path + "/fs_simple.bin");
     m_program = bgfx::createProgram(m_vertex_shader, m_fragment_shader, true);
 
     m_cube.initializePrimitive();
@@ -117,7 +121,7 @@ void Window::updateGraphics()
             glm::mat4 model_matrix(1.0f);
             model_matrix = glm::translate(model_matrix, glm::vec3(x, y, 0.0f));
             model_matrix = glm::rotate(model_matrix, t, glm::vec3(x, y, 1.0f));
-            model_matrix = glm::scale(model_matrix, glm::vec3(1.0f / n));
+            model_matrix = glm::scale(model_matrix, glm::vec3(2.0f / n));
             bgfx::setTransform(glm::value_ptr(model_matrix));
 
             m_cube.submitPrimitive(m_program);

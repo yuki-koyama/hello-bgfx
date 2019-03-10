@@ -3,12 +3,10 @@
 
 #include <bgfx/bgfx.h>
 
-struct PositionColorVertex
+struct PositionNormalVertex
 {
-    float x;
-    float y;
-    float z;
-    uint32_t abgr;
+    glm::vec3 position;
+    glm::vec3 normal;
 };
 
 class Cube
@@ -16,43 +14,74 @@ class Cube
 public:
     void initializePrimitive()
     {
-        static const PositionColorVertex cube_vertices[] =
+        static const PositionNormalVertex vertices[] =
         {
-            {  1.0f,  1.0f,  1.0f, 0xff000000 },
-            { -1.0f,  1.0f,  1.0f, 0xff0000ff },
-            {  1.0f, -1.0f,  1.0f, 0xff00ff00 },
-            { -1.0f, -1.0f,  1.0f, 0xff00ffff },
-            {  1.0f,  1.0f, -1.0f, 0xffff0000 },
-            { -1.0f,  1.0f, -1.0f, 0xffff00ff },
-            {  1.0f, -1.0f, -1.0f, 0xffffff00 },
-            { -1.0f, -1.0f, -1.0f, 0xffffffff },
+            { { +0.5, +0.5, +0.5 }, { 0.0, 0.0, +1.0 } },
+            { { -0.5, +0.5, +0.5 }, { 0.0, 0.0, +1.0 } },
+            { { -0.5, -0.5, +0.5 }, { 0.0, 0.0, +1.0 } },
+            { { +0.5, +0.5, +0.5 }, { 0.0, 0.0, +1.0 } },
+            { { -0.5, -0.5, +0.5 }, { 0.0, 0.0, +1.0 } },
+            { { +0.5, -0.5, +0.5 }, { 0.0, 0.0, +1.0 } },
+
+            { { +0.5, +0.5, -0.5 }, { +1.0, 0.0, 0.0 } },
+            { { +0.5, +0.5, +0.5 }, { +1.0, 0.0, 0.0 } },
+            { { +0.5, -0.5, +0.5 }, { +1.0, 0.0, 0.0 } },
+            { { +0.5, +0.5, -0.5 }, { +1.0, 0.0, 0.0 } },
+            { { +0.5, -0.5, +0.5 }, { +1.0, 0.0, 0.0 } },
+            { { +0.5, -0.5, -0.5 }, { +1.0, 0.0, 0.0 } },
+
+            { { -0.5, +0.5, -0.5 }, { 0.0, 0.0, -1.0 } },
+            { { +0.5, +0.5, -0.5 }, { 0.0, 0.0, -1.0 } },
+            { { +0.5, -0.5, -0.5 }, { 0.0, 0.0, -1.0 } },
+            { { -0.5, +0.5, -0.5 }, { 0.0, 0.0, -1.0 } },
+            { { +0.5, -0.5, -0.5 }, { 0.0, 0.0, -1.0 } },
+            { { -0.5, -0.5, -0.5 }, { 0.0, 0.0, -1.0 } },
+
+            { { -0.5, +0.5, +0.5 }, { -1.0, 0.0, 0.0 } },
+            { { -0.5, +0.5, -0.5 }, { -1.0, 0.0, 0.0 } },
+            { { -0.5, -0.5, -0.5 }, { -1.0, 0.0, 0.0 } },
+            { { -0.5, +0.5, +0.5 }, { -1.0, 0.0, 0.0 } },
+            { { -0.5, -0.5, -0.5 }, { -1.0, 0.0, 0.0 } },
+            { { -0.5, -0.5, +0.5 }, { -1.0, 0.0, 0.0 } },
+
+            { { +0.5, +0.5, -0.5 }, { 0.0, +1.0, 0.0 } },
+            { { -0.5, +0.5, -0.5 }, { 0.0, +1.0, 0.0 } },
+            { { -0.5, +0.5, +0.5 }, { 0.0, +1.0, 0.0 } },
+            { { +0.5, +0.5, -0.5 }, { 0.0, +1.0, 0.0 } },
+            { { -0.5, +0.5, +0.5 }, { 0.0, +1.0, 0.0 } },
+            { { +0.5, +0.5, +0.5 }, { 0.0, +1.0, 0.0 } },
+
+            { { -0.5, -0.5, +0.5 }, { 0.0, -1.0, 0.0 } },
+            { { -0.5, -0.5, -0.5 }, { 0.0, -1.0, 0.0 } },
+            { { +0.5, -0.5, -0.5 }, { 0.0, -1.0, 0.0 } },
+            { { -0.5, -0.5, +0.5 }, { 0.0, -1.0, 0.0 } },
+            { { +0.5, -0.5, -0.5 }, { 0.0, -1.0, 0.0 } },
+            { { +0.5, -0.5, +0.5 }, { 0.0, -1.0, 0.0 } },
         };
 
-        static const uint16_t cube_triangle_list[] =
+        static const uint16_t triangle_list[] =
         {
             0, 1, 2,
-            1, 3, 2,
-            4, 6, 5,
-            5, 6, 7,
-            0, 2, 4,
-            4, 2, 6,
-            1, 5, 3,
-            5, 7, 3,
-            0, 4, 1,
-            4, 5, 1,
-            2, 3, 6,
-            6, 3, 7,
-            1, 0, 2,
-            3, 1, 2,
+            3, 4, 5,
+            6, 7, 8,
+            9, 10, 11,
+            12, 13, 14,
+            15, 16, 17,
+            18, 19, 20,
+            21, 22, 23,
+            24, 25, 26,
+            27, 28, 29,
+            30, 31, 32,
+            33, 34, 35,
         };
 
         bgfx::VertexDecl vertex_decl;
         vertex_decl.begin()
         .add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float)
-        .add(bgfx::Attrib::Color0, 4, bgfx::AttribType::Uint8, true)
+        .add(bgfx::Attrib::Normal, 3, bgfx::AttribType::Float)
         .end();
-        m_vertex_buffer_handle = bgfx::createVertexBuffer(bgfx::makeRef(cube_vertices, sizeof(cube_vertices)), vertex_decl);
-        m_index_buffer_handle = bgfx::createIndexBuffer(bgfx::makeRef(cube_triangle_list, sizeof(cube_triangle_list)));
+        m_vertex_buffer_handle = bgfx::createVertexBuffer(bgfx::makeRef(vertices, sizeof(vertices)), vertex_decl);
+        m_index_buffer_handle = bgfx::createIndexBuffer(bgfx::makeRef(triangle_list, sizeof(triangle_list)));
     }
 
     void submitPrimitive(bgfx::ProgramHandle program) const

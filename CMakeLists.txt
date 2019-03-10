@@ -47,6 +47,7 @@ set(BUILD_STATIC_LIBS              ON  CACHE INTERNAL "" FORCE)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/external/glm)
 
 add_definitions(-DBGFX_EXAMPLE_SHADERS_DIR="${BGFX_DIR}/examples/runtime/shaders")
+add_definitions(-DHELLO_BGFX_RUNTIME_RESOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/runtime")
 
 file(GLOB files *.cpp *.hpp primitives/*.cpp primitives/*.hpp)
 add_executable(hello-bgfx ${files})

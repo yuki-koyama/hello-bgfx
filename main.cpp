@@ -2,8 +2,8 @@
 #include <iostream>
 #include <string>
 #include <bx/math.h>
+#include <glm/glm.hpp>
 #include <glm/ext.hpp>
-#include <glm/gtx/string_cast.hpp>
 #include "templatewindow.hpp"
 
 namespace bgfxutil

@@ -6,6 +6,10 @@ Hello-world project to use [bgfx](https://github.com/bkaradzic/bgfx) with [GLFW]
 
 Use CMake.
 
+## Rebuild Shaders
+
+Use `shaderc` in bgfx.
+
 ## Dependencies
 
 - [bgfx.cmake](https://github.com/JoshuaBrookover/bgfx.cmake)
@@ -17,5 +21,6 @@ Use CMake.
 
 ## Notes
 
+- OpenGL only
 - Right-handed
 - Y up and -Z forward

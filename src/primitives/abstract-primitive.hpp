@@ -2,6 +2,7 @@
 #define abstract_primitive_hpp
 
 #include <cassert>
+#include <vector>
 #include <bgfx/bgfx.h>
 #include <glm/glm.hpp>
 
@@ -41,6 +42,9 @@ public:
     }
 
 protected:
+
+    std::vector<PositionNormalVertex> m_vertices;
+    std::vector<uint16_t> m_triangle_list;
 
     bool m_is_initialized;
 

@@ -11,7 +11,7 @@ public:
 
     void initializePrimitive() override
     {
-        static const PositionNormalVertex vertices[] =
+        m_vertices =
         {
             { { +0.5, +0.5, +0.5 }, { 0.0, 0.0, +1.0 } },
             { { -0.5, +0.5, +0.5 }, { 0.0, 0.0, +1.0 } },
@@ -56,7 +56,7 @@ public:
             { { +0.5, -0.5, +0.5 }, { 0.0, -1.0, 0.0 } },
         };
 
-        static const uint16_t triangle_list[] =
+        m_triangle_list =
         {
             0, 1, 2,
             3, 4, 5,
@@ -77,8 +77,8 @@ public:
         .add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float)
         .add(bgfx::Attrib::Normal, 3, bgfx::AttribType::Float)
         .end();
-        m_vertex_buffer_handle = bgfx::createVertexBuffer(bgfx::makeRef(vertices, sizeof(vertices)), vertex_decl);
-        m_index_buffer_handle = bgfx::createIndexBuffer(bgfx::makeRef(triangle_list, sizeof(triangle_list)));
+        m_vertex_buffer_handle = bgfx::createVertexBuffer(bgfx::makeRef(m_vertices.data(), sizeof(PositionNormalVertex) * m_vertices.size()), vertex_decl);
+        m_index_buffer_handle = bgfx::createIndexBuffer(bgfx::makeRef(m_triangle_list.data(), sizeof(uint16_t) * m_triangle_list.size()));
 
         m_is_initialized = true;
     }

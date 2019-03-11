@@ -4,9 +4,10 @@ project(hello-bgfx)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+option(HELLO_BGFX_BUILD_SHADERS "" ON)
+
 set(BGFX_AMALGAMATED      OFF CACHE INTERNAL "" FORCE)
 set(BGFX_BUILD_EXAMPLES   OFF CACHE INTERNAL "" FORCE)
-set(BGFX_BUILD_TOOLS      OFF CACHE INTERNAL "" FORCE)
 set(BGFX_CONFIG_DEBUG     OFF CACHE INTERNAL "" FORCE)
 set(BGFX_CUSTOM_TARGETS   OFF CACHE INTERNAL "" FORCE)
 set(BGFX_INSTALL          OFF CACHE INTERNAL "" FORCE)
@@ -15,6 +16,11 @@ set(BGFX_USE_DEBUG_SUFFIX OFF CACHE INTERNAL "" FORCE)
 set(BGFX_USE_OVR          OFF CACHE INTERNAL "" FORCE)
 set(BUILD_SHARED_LIBS     OFF CACHE INTERNAL "" FORCE)
 set(BX_AMALGAMATED        OFF CACHE INTERNAL "" FORCE)
+if (HELLO_BGFX_BUILD_SHADERS)
+  set(BGFX_BUILD_TOOLS ON CACHE INTERNAL "" FORCE)
+else()
+  set(BGFX_BUILD_TOOLS OFF CACHE INTERNAL "" FORCE)
+endif()
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/external/bgfx.cmake)
 
 set(GLFW_BUILD_DOCS     OFF CACHE INTERNAL "" FORCE)
@@ -49,6 +55,14 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/external/glm)
 add_definitions(-DBGFX_EXAMPLE_SHADERS_DIR="${BGFX_DIR}/examples/runtime/shaders")
 add_definitions(-DHELLO_BGFX_RUNTIME_RESOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/runtime")
 
-file(GLOB files *.cpp *.hpp primitives/*.cpp primitives/*.hpp)
+if (HELLO_BGFX_BUILD_SHADERS)
+  add_custom_target(
+    build-shaders
+    COMMAND $<TARGET_FILE:shaderc> -f ${CMAKE_CURRENT_SOURCE_DIR}/shaders/vs_simple.sc -o ${CMAKE_CURRENT_SOURCE_DIR}/runtime/vs_simple.bin --type v -i ${BGFX_DIR}/src --varyingdef ${CMAKE_CURRENT_SOURCE_DIR}/shaders/varying_simple.def.sc
+    COMMAND $<TARGET_FILE:shaderc> -f ${CMAKE_CURRENT_SOURCE_DIR}/shaders/fs_simple.sc -o ${CMAKE_CURRENT_SOURCE_DIR}/runtime/fs_simple.bin --type f -i ${BGFX_DIR}/src --varyingdef ${CMAKE_CURRENT_SOURCE_DIR}/shaders/varying_simple.def.sc
+  )
+endif()
+
+file(GLOB files *.cpp *.hpp primitives/*.cpp primitives/*.hpp shaders/*.sc)
 add_executable(hello-bgfx ${files})
 target_link_libraries(hello-bgfx bgfx dear-imgui glfw glm)

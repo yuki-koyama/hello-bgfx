@@ -4,7 +4,7 @@
 #include <string>
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
-#include "templatewindow.hpp"
+#include "template-window.hpp"
 #include "camera.hpp"
 #include "primitives/cube.hpp"
 

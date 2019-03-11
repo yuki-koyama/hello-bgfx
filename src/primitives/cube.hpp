@@ -1,7 +1,7 @@
 #ifndef cube_hpp
 #define cube_hpp
 
-#include <bgfx/bgfx.h>
+#include <cassert>
 #include "abstract-primitive.hpp"
 
 class Cube : public AbstractPrimitive
@@ -86,6 +86,8 @@ public:
 
     void submitPrimitive(bgfx::ProgramHandle program) const override
     {
+        assert(m_is_initialized);
+
         bgfx::setVertexBuffer(0, m_vertex_buffer_handle);
         bgfx::setIndexBuffer(m_index_buffer_handle);
 

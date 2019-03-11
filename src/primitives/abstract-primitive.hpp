@@ -1,6 +1,9 @@
 #ifndef abstract_primitive_hpp
 #define abstract_primitive_hpp
 
+#include <bgfx/bgfx.h>
+#include <glm/glm.hpp>
+
 struct PositionNormalVertex
 {
     glm::vec3 position;
@@ -10,7 +13,7 @@ struct PositionNormalVertex
 class AbstractPrimitive
 {
 public:
-    
+
     AbstractPrimitive()
     : m_is_initialized(false)
     {

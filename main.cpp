@@ -1,3 +1,4 @@
+#include <cassert>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -43,6 +44,7 @@ std::string getShaderDirectoryPath(const bgfx::RendererType::Enum renderer_type)
     }();
     return base_path + "/" + render_type_directory_name;
 #else
+    assert(renderer_type == bgfx::RendererType::OpenGL);
     return HELLO_BGFX_RUNTIME_RESOURCE_DIR;
 #endif
 }

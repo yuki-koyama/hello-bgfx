@@ -6,6 +6,7 @@ const vec3 ambient_color = vec3(0.05, 0.05, 0.05);
 const vec3 diffuse_color = vec3(0.20, 0.30, 0.70);
 const vec3 specular_color = vec3(1.00, 1.00, 1.00);
 const float shininess = 128.0;
+const float gamma = 2.2;
 
 vec3 calculateLambertDiffuse(vec3 normal, vec3 light_dir, vec3 diffuse_color)
 {
@@ -31,7 +32,7 @@ void main()
 	vec3 specular = calculateBlinnSpecular(normal, view_dir, light_dir, specular_color, shininess);
 
 	vec3 linear_color = ambient + diffuse + specular;
-	vec3 corrected_color = pow(linear_color, vec3_splat(1.0 / 2.2));
+	vec3 corrected_color = pow(linear_color, vec3_splat(1.0 / gamma));
 
 	gl_FragColor.xyz = corrected_color;
 	gl_FragColor.w = 1.0;

@@ -1,7 +1,6 @@
 #ifndef sphere_hpp
 #define sphere_hpp
 
-#include <cassert>
 #include <vector>
 #include "abstract-primitive.hpp"
 
@@ -68,16 +67,6 @@ public:
         m_index_buffer_handle = bgfx::createIndexBuffer(bgfx::makeRef(triangle_list.data(), sizeof(uint16_t) * triangle_list.size()));
 
         m_is_initialized = true;
-    }
-
-    void submitPrimitive(bgfx::ProgramHandle program) const override
-    {
-        assert(m_is_initialized);
-
-        bgfx::setVertexBuffer(0, m_vertex_buffer_handle);
-        bgfx::setIndexBuffer(m_index_buffer_handle);
-
-        bgfx::submit(0, program);
     }
 
 private:

@@ -63,6 +63,6 @@ if (HELLO_BGFX_BUILD_SHADERS)
   )
 endif()
 
-file(GLOB files *.cpp *.hpp primitives/*.cpp primitives/*.hpp shaders/*.sc)
+file(GLOB files src/*.cpp src/*.hpp src/primitives/*.cpp src/primitives/*.hpp shaders/*.sc)
 add_executable(hello-bgfx ${files})
 target_link_libraries(hello-bgfx bgfx dear-imgui glfw glm)

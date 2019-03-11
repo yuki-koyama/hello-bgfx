@@ -93,8 +93,8 @@ void Window::initializeGraphics()
     bgfx::setViewRect(0, 0, 0, getWidth(), getHeight());
 
     const std::string shader_directory_path = getShaderDirectoryPath(bgfx::getRendererType());
-    m_vertex_shader = bgfxutil::loadShader(shader_directory_path + "/vs_simple.bin");
-    m_fragment_shader = bgfxutil::loadShader(shader_directory_path + "/fs_simple.bin");
+    m_vertex_shader = bgfxutil::loadShader(shader_directory_path + "/vs_blinnphong.bin");
+    m_fragment_shader = bgfxutil::loadShader(shader_directory_path + "/fs_blinnphong.bin");
     m_program = bgfx::createProgram(m_vertex_shader, m_fragment_shader, true);
 
     m_cube.initializePrimitive();

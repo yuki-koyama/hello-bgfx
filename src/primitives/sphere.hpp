@@ -1,7 +1,6 @@
 #ifndef sphere_hpp
 #define sphere_hpp
 
-#include <vector>
 #include "abstract-primitive.hpp"
 
 class Sphere : public AbstractPrimitive

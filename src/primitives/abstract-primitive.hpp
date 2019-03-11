@@ -29,7 +29,20 @@ public:
         }
     }
 
-    virtual void initializePrimitive() = 0;
+    void initializePrimitive()
+    {
+        prepareBuffers();
+
+        bgfx::VertexDecl vertex_decl;
+        vertex_decl.begin()
+        .add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float)
+        .add(bgfx::Attrib::Normal, 3, bgfx::AttribType::Float)
+        .end();
+        m_vertex_buffer_handle = bgfx::createVertexBuffer(bgfx::makeRef(m_vertices.data(), sizeof(PositionNormalVertex) * m_vertices.size()), vertex_decl);
+        m_index_buffer_handle = bgfx::createIndexBuffer(bgfx::makeRef(m_triangle_list.data(), sizeof(uint16_t) * m_triangle_list.size()));
+
+        m_is_initialized = true;
+    }
 
     void submitPrimitive(bgfx::ProgramHandle program) const
     {
@@ -43,9 +56,13 @@ public:
 
 protected:
 
+    virtual void prepareBuffers() = 0;
+
     std::vector<PositionNormalVertex> m_vertices;
     std::vector<uint16_t> m_triangle_list;
 
+private:
+    
     bool m_is_initialized;
 
     bgfx::VertexBufferHandle m_vertex_buffer_handle;

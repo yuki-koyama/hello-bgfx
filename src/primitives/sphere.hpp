@@ -10,7 +10,9 @@ public:
 
     Sphere() : AbstractPrimitive() {}
 
-    void initializePrimitive() override
+private:
+
+    void prepareBuffers() override
     {
         constexpr double pi = glm::pi<double>();
         constexpr int latitude_resolution  = 20;
@@ -59,16 +61,6 @@ public:
         {
             m_triangle_list[i] = static_cast<uint16_t>(i);
         }
-
-        bgfx::VertexDecl vertex_decl;
-        vertex_decl.begin()
-        .add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float)
-        .add(bgfx::Attrib::Normal, 3, bgfx::AttribType::Float)
-        .end();
-        m_vertex_buffer_handle = bgfx::createVertexBuffer(bgfx::makeRef(m_vertices.data(), sizeof(PositionNormalVertex) * m_vertices.size()), vertex_decl);
-        m_index_buffer_handle = bgfx::createIndexBuffer(bgfx::makeRef(m_triangle_list.data(), sizeof(uint16_t) * m_triangle_list.size()));
-
-        m_is_initialized = true;
     }
 };
 

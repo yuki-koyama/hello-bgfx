@@ -66,9 +66,6 @@ private:
     Camera m_camera;
     Cube m_cube;
 
-    bgfx::VertexBufferHandle m_vertex_buffer_handle;
-    bgfx::IndexBufferHandle m_index_buffer_handle;
-
     bgfx::ShaderHandle m_vertex_shader;
     bgfx::ShaderHandle m_fragment_shader;
     bgfx::ProgramHandle m_program;
@@ -87,11 +84,6 @@ m_camera(
 
 Window::~Window()
 {
-    if (m_is_initialized)
-    {
-        bgfx::destroy(m_index_buffer_handle);
-        bgfx::destroy(m_vertex_buffer_handle);
-    }
 }
 
 void Window::initializeGraphics()

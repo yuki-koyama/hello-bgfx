@@ -12,6 +12,20 @@ struct PositionNormalVertex
 class Cube
 {
 public:
+
+    Cube() :
+    m_is_initialized(false)
+    {
+    }
+
+    ~Cube()
+    {
+        if (m_is_initialized)
+        {
+            bgfx::destroy(m_vertex_buffer_handle);
+        }
+    }
+
     void initializePrimitive()
     {
         static const PositionNormalVertex vertices[] =
@@ -82,6 +96,8 @@ public:
         .end();
         m_vertex_buffer_handle = bgfx::createVertexBuffer(bgfx::makeRef(vertices, sizeof(vertices)), vertex_decl);
         m_index_buffer_handle = bgfx::createIndexBuffer(bgfx::makeRef(triangle_list, sizeof(triangle_list)));
+
+        m_is_initialized = true;
     }
 
     void submitPrimitive(bgfx::ProgramHandle program) const
@@ -93,6 +109,9 @@ public:
     }
 
 private:
+
+    bool m_is_initialized;
+
     bgfx::VertexBufferHandle m_vertex_buffer_handle;
     bgfx::IndexBufferHandle m_index_buffer_handle;
 };

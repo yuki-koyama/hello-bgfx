@@ -2,31 +2,15 @@
 #define cube_hpp
 
 #include <bgfx/bgfx.h>
+#include "abstract-primitive.hpp"
 
-struct PositionNormalVertex
-{
-    glm::vec3 position;
-    glm::vec3 normal;
-};
-
-class Cube
+class Cube : public AbstractPrimitive
 {
 public:
 
-    Cube() :
-    m_is_initialized(false)
-    {
-    }
+    Cube() : AbstractPrimitive() {}
 
-    ~Cube()
-    {
-        if (m_is_initialized)
-        {
-            bgfx::destroy(m_vertex_buffer_handle);
-        }
-    }
-
-    void initializePrimitive()
+    void initializePrimitive() override
     {
         static const PositionNormalVertex vertices[] =
         {
@@ -100,20 +84,13 @@ public:
         m_is_initialized = true;
     }
 
-    void submitPrimitive(bgfx::ProgramHandle program) const
+    void submitPrimitive(bgfx::ProgramHandle program) const override
     {
         bgfx::setVertexBuffer(0, m_vertex_buffer_handle);
         bgfx::setIndexBuffer(m_index_buffer_handle);
 
         bgfx::submit(0, program);
     }
-
-private:
-
-    bool m_is_initialized;
-
-    bgfx::VertexBufferHandle m_vertex_buffer_handle;
-    bgfx::IndexBufferHandle m_index_buffer_handle;
 };
 
 #endif /* cube_hpp */

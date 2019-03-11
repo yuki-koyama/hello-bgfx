@@ -10,6 +10,16 @@ struct PositionNormalVertex
 {
     glm::vec3 position;
     glm::vec3 normal;
+
+    static bgfx::VertexDecl getVertexDecl()
+    {
+        bgfx::VertexDecl vertex_decl;
+        vertex_decl.begin()
+        .add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float)
+        .add(bgfx::Attrib::Normal, 3, bgfx::AttribType::Float)
+        .end();
+        return vertex_decl;
+    }
 };
 
 class AbstractPrimitive
@@ -33,11 +43,7 @@ public:
     {
         prepareBuffers();
 
-        bgfx::VertexDecl vertex_decl;
-        vertex_decl.begin()
-        .add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float)
-        .add(bgfx::Attrib::Normal, 3, bgfx::AttribType::Float)
-        .end();
+        const bgfx::VertexDecl vertex_decl = PositionNormalVertex::getVertexDecl();
         m_vertex_buffer_handle = bgfx::createVertexBuffer(bgfx::makeRef(m_vertices.data(), sizeof(PositionNormalVertex) * m_vertices.size()), vertex_decl);
         m_index_buffer_handle = bgfx::createIndexBuffer(bgfx::makeRef(m_triangle_list.data(), sizeof(uint16_t) * m_triangle_list.size()));
 
@@ -62,7 +68,7 @@ protected:
     std::vector<uint16_t> m_triangle_list;
 
 private:
-    
+
     bool m_is_initialized;
 
     bgfx::VertexBufferHandle m_vertex_buffer_handle;

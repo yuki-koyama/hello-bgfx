@@ -8,7 +8,7 @@ Use CMake.
 
 ## Rebuild Shaders
 
-Use `shaderc` in bgfx.
+Enable the CMake option `HELLO_BGFX_BUILD_SHADERS`, and then build the target `build-shaders`. This target builds the tool `shaderc` in bgfx and then builds the shader sources by using it.
 
 ## Dependencies
 

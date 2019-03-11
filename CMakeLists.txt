@@ -58,8 +58,8 @@ add_definitions(-DHELLO_BGFX_RUNTIME_RESOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/r
 if (HELLO_BGFX_BUILD_SHADERS)
   add_custom_target(
     build-shaders
-    COMMAND $<TARGET_FILE:shaderc> -f ${CMAKE_CURRENT_SOURCE_DIR}/shaders/vs_blinnphong.sc -o ${CMAKE_CURRENT_SOURCE_DIR}/runtime/vs_blinnphong.bin --type v -i ${BGFX_DIR}/src --varyingdef ${CMAKE_CURRENT_SOURCE_DIR}/shaders/varying_blinnphong.def.sc
-    COMMAND $<TARGET_FILE:shaderc> -f ${CMAKE_CURRENT_SOURCE_DIR}/shaders/fs_blinnphong.sc -o ${CMAKE_CURRENT_SOURCE_DIR}/runtime/fs_blinnphong.bin --type f -i ${BGFX_DIR}/src --varyingdef ${CMAKE_CURRENT_SOURCE_DIR}/shaders/varying_blinnphong.def.sc
+    COMMAND $<TARGET_FILE:shaderc> -f ${CMAKE_CURRENT_SOURCE_DIR}/shaders/vs_blinnphong.sc -o ${CMAKE_CURRENT_SOURCE_DIR}/runtime/glsl/vs_blinnphong.bin --type v -i ${BGFX_DIR}/src --varyingdef ${CMAKE_CURRENT_SOURCE_DIR}/shaders/varying_blinnphong.def.sc
+    COMMAND $<TARGET_FILE:shaderc> -f ${CMAKE_CURRENT_SOURCE_DIR}/shaders/fs_blinnphong.sc -o ${CMAKE_CURRENT_SOURCE_DIR}/runtime/glsl/fs_blinnphong.bin --type f -i ${BGFX_DIR}/src --varyingdef ${CMAKE_CURRENT_SOURCE_DIR}/shaders/varying_blinnphong.def.sc
   )
 endif()
 

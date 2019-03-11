@@ -31,22 +31,16 @@ namespace bgfxutil
 
 std::string getShaderDirectoryPath(const bgfx::RendererType::Enum renderer_type)
 {
-#if 0
-    const std::string base_path = BGFX_EXAMPLE_SHADERS_DIR;
+    const std::string base_path = HELLO_BGFX_RUNTIME_RESOURCE_DIR;
     const std::string render_type_directory_name = [&]()
     {
         switch (renderer_type)
         {
-            case bgfx::RendererType::Metal: return "metal";
             case bgfx::RendererType::OpenGL: return "glsl";
             default: throw std::runtime_error("Renderer type not supported.");
         }
     }();
     return base_path + "/" + render_type_directory_name;
-#else
-    assert(renderer_type == bgfx::RendererType::OpenGL);
-    return HELLO_BGFX_RUNTIME_RESOURCE_DIR;
-#endif
 }
 
 class Window : public TemplateWindow

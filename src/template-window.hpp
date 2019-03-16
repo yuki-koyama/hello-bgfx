@@ -30,6 +30,8 @@ public:
 
         if (!m_window) { throw std::runtime_error("Cannot create a window."); }
 
+        glewInit();
+
         glfwMakeContextCurrent(m_window);
         std::cout << "vendor   : " << glGetString(GL_VENDOR) << std::endl;
         std::cout << "renderer : " << glGetString(GL_RENDERER) << std::endl;

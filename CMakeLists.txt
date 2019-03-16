@@ -85,4 +85,4 @@ endif()
 
 file(GLOB files src/*.cpp src/*.hpp src/primitives/*.cpp src/primitives/*.hpp shaders/*.sc)
 add_executable(hello-bgfx ${files})
-target_link_libraries(hello-bgfx bgfx dear-imgui glfw glm)
+target_link_libraries(hello-bgfx bgfx glfw glm imgui libglew_static)

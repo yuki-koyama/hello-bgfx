@@ -2,8 +2,8 @@
 #define templatewindow_hpp
 
 #include <chrono>
-#include <GL/glew.h>
 #include <bgfx/bgfx.h>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #define GLFW_EXPOSE_NATIVE_COCOA
 #include <GLFW/glfw3native.h>

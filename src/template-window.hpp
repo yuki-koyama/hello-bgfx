@@ -30,13 +30,15 @@ public:
 
         if (!m_window) { throw std::runtime_error("Cannot create a window."); }
 
+        glfwMakeContextCurrent(m_window);
+
         glewInit();
 
-        glfwMakeContextCurrent(m_window);
         std::cout << "vendor   : " << glGetString(GL_VENDOR) << std::endl;
         std::cout << "renderer : " << glGetString(GL_RENDERER) << std::endl;
         std::cout << "version  : " << glGetString(GL_VERSION) << std::endl;
         std::cout << "shader   : " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
+
         glfwMakeContextCurrent(nullptr);
 
         m_time_point = std::chrono::steady_clock::now();

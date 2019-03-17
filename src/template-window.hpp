@@ -46,10 +46,14 @@ public:
 
     ~TemplateWindow()
     {
+        glfwMakeContextCurrent(m_window);
+
         if (m_is_initialized)
         {
             bgfx::shutdown();
         }
+
+        glfwMakeContextCurrent(nullptr);
         glfwDestroyWindow(m_window);
         glfwTerminate();
     }
@@ -58,6 +62,8 @@ public:
     {
         const int width = getWidth();
         const int height = getHeight();
+
+        glfwMakeContextCurrent(m_window);
 
         bgfx::Init bgfx_init_settings;
         bgfx_init_settings.type = bgfx::RendererType::OpenGL;
@@ -89,11 +95,18 @@ public:
             }
 #endif
 
+#if 0
+            bgfx::setDebug(BGFX_DEBUG_STATS);
+#endif
+
             updateGraphics();
             bgfx::frame();
+
             glfwPollEvents();
             ++ m_counter;
         }
+
+        glfwMakeContextCurrent(nullptr);
     }
 
     GLFWwindow* getWindow() const { return m_window; }

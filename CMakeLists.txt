@@ -6,8 +6,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(HELLO_BGFX_BUILD_SHADERS "" ON)
 
-add_definitions(-DIMGUI_IMPL_OPENGL_LOADER_GLEW)
-
 set(BGFX_AMALGAMATED      OFF CACHE INTERNAL "" FORCE)
 set(BGFX_BUILD_EXAMPLES   OFF CACHE INTERNAL "" FORCE)
 set(BGFX_CONFIG_DEBUG     OFF CACHE INTERNAL "" FORCE)
@@ -60,19 +58,6 @@ set(glew-cmake_BUILD_SINGLE_CONTEXT ON  CACHE INTERNAL "" FORCE)
 set(glew-cmake_BUILD_STATIC         ON  CACHE INTERNAL "" FORCE)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/external/glew-cmake)
 
-file(
-  GLOB
-  imgui_files
-  ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/*.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/*.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/examples/imgui_impl_glfw.*
-  ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/examples/imgui_impl_opengl3.*
-)
-add_library(imgui ${imgui_files})
-target_include_directories(imgui PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui)
-target_link_libraries(imgui glfw libglew_static)
-
-add_definitions(-DBGFX_EXAMPLE_SHADERS_DIR="${BGFX_DIR}/examples/runtime/shaders")
 add_definitions(-DHELLO_BGFX_RUNTIME_RESOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/runtime")
 
 if (HELLO_BGFX_BUILD_SHADERS)
@@ -85,4 +70,4 @@ endif()
 
 file(GLOB files src/*.cpp src/*.hpp src/primitives/*.cpp src/primitives/*.hpp shaders/*.sc)
 add_executable(hello-bgfx ${files})
-target_link_libraries(hello-bgfx bgfx glfw glm imgui libglew_static)
+target_link_libraries(hello-bgfx bgfx glfw glm libglew_static)

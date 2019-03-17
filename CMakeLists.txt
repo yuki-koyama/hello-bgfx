@@ -52,7 +52,12 @@ set(GLM_TEST_FORCE_PURE            OFF CACHE INTERNAL "" FORCE)
 set(BUILD_STATIC_LIBS              ON  CACHE INTERNAL "" FORCE)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/external/glm)
 
-add_definitions(-DBGFX_EXAMPLE_SHADERS_DIR="${BGFX_DIR}/examples/runtime/shaders")
+set(glew-cmake_BUILD_MULTI_CONTEXT  OFF CACHE INTERNAL "" FORCE)
+set(glew-cmake_BUILD_SHARED         OFF CACHE INTERNAL "" FORCE)
+set(glew-cmake_BUILD_SINGLE_CONTEXT ON  CACHE INTERNAL "" FORCE)
+set(glew-cmake_BUILD_STATIC         ON  CACHE INTERNAL "" FORCE)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/external/glew-cmake)
+
 add_definitions(-DHELLO_BGFX_RUNTIME_RESOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/runtime")
 
 if (HELLO_BGFX_BUILD_SHADERS)
@@ -65,4 +70,4 @@ endif()
 
 file(GLOB files src/*.cpp src/*.hpp src/primitives/*.cpp src/primitives/*.hpp shaders/*.sc)
 add_executable(hello-bgfx ${files})
-target_link_libraries(hello-bgfx bgfx dear-imgui glfw glm)
+target_link_libraries(hello-bgfx bgfx glfw glm libglew_static)

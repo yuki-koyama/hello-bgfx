@@ -8,8 +8,6 @@
 #define GLFW_EXPOSE_NATIVE_COCOA
 #include <GLFW/glfw3native.h>
 
-#define FIX_MACOS_MOJAVE_ISSUE
-
 class TemplateWindow
 {
 public:
@@ -77,24 +75,9 @@ public:
 
         m_is_initialized = true;
 
-#ifdef FIX_MACOS_MOJAVE_ISSUE
-        bool is_initialized_for_mojave = false;
-#endif
-
         m_counter = 0;
         while (!glfwWindowShouldClose(m_window))
         {
-#ifdef FIX_MACOS_MOJAVE_ISSUE
-            if (!is_initialized_for_mojave)
-            {
-                constexpr int non_zero = 1;
-                glfwPollEvents();
-                glfwSetWindowSize(m_window, width + non_zero, height);
-                glfwSetWindowSize(m_window, width, height);
-                is_initialized_for_mojave = true;
-            }
-#endif
-
 #if 0
             bgfx::setDebug(BGFX_DEBUG_STATS);
 #endif

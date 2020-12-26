@@ -11,14 +11,14 @@ struct PositionNormalVertex
     glm::vec3 position;
     glm::vec3 normal;
 
-    static bgfx::VertexDecl getVertexDecl()
+    static bgfx::VertexLayout getVertexLayout()
     {
-        bgfx::VertexDecl vertex_decl;
-        vertex_decl.begin()
+        bgfx::VertexLayout vertex_layout;
+        vertex_layout.begin()
         .add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float)
         .add(bgfx::Attrib::Normal, 3, bgfx::AttribType::Float)
         .end();
-        return vertex_decl;
+        return vertex_layout;
     }
 };
 
@@ -43,8 +43,8 @@ public:
     {
         prepareBuffers();
 
-        const bgfx::VertexDecl vertex_decl = PositionNormalVertex::getVertexDecl();
-        m_vertex_buffer_handle = bgfx::createVertexBuffer(bgfx::makeRef(m_vertices.data(), sizeof(PositionNormalVertex) * m_vertices.size()), vertex_decl);
+        const bgfx::VertexLayout vertex_layout = PositionNormalVertex::getVertexLayout();
+        m_vertex_buffer_handle = bgfx::createVertexBuffer(bgfx::makeRef(m_vertices.data(), sizeof(PositionNormalVertex) * m_vertices.size()), vertex_layout);
         m_index_buffer_handle = bgfx::createIndexBuffer(bgfx::makeRef(m_triangle_list.data(), sizeof(uint16_t) * m_triangle_list.size()));
 
         m_is_initialized = true;

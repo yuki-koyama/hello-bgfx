@@ -64,11 +64,13 @@ public:
         glfwMakeContextCurrent(m_window);
 
         bgfx::Init bgfx_init_settings;
+        bgfx_init_settings.vendorId = BGFX_PCI_ID_NONE; // Let bgfx auto-detect
         bgfx_init_settings.type = bgfx::RendererType::OpenGL;
         bgfx_init_settings.resolution.width = width;
         bgfx_init_settings.resolution.height = height;
         bgfx_init_settings.resolution.reset = BGFX_RESET_VSYNC;
         bgfx_init_settings.platformData.nwh = glfwGetCocoaWindow(m_window);
+        bgfx_init_settings.platformData.context = nullptr; // Let bgfx create a new context
         bgfx::init(bgfx_init_settings);
 
         initializeGraphics();

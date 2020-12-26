@@ -23,6 +23,12 @@ else()
 endif()
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/external/bgfx.cmake)
 
+# Note: This was necessary to avoid a run-time error on macOS/OpenGL. Without
+# this option, the NSOpenGLViewContext's setView method was called from a
+# wrong (?) thread during bgfx::init and then the app crashes. This needs to be
+# investigated further.
+target_compile_definitions(bgfx PUBLIC BGFX_CONFIG_MULTITHREADED=0)
+
 set(GLFW_BUILD_DOCS     OFF CACHE INTERNAL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE INTERNAL "" FORCE)
 set(GLFW_BUILD_TESTS    OFF CACHE INTERNAL "" FORCE)
